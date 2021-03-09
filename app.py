@@ -6,6 +6,8 @@ from pywinauto import Desktop
 from pywinauto.findwindows import WindowAmbiguousError, WindowNotFoundError, ElementAmbiguousError, ElementNotFoundError
 import clipboard
 import warnings
+import settings
+import ftplib
 
 
 warnings.simplefilter('ignore', category=UserWarning)
@@ -39,4 +41,8 @@ send_keys('^{TAB}')
 send_keys('^l^c')
 text = clipboard.paste()
 print(text)
-
+session = ftplib.FTP(settings.HOST,settings.USER,settings.PASSWORD)
+file = open('img3d_002179.rar','rb')                  # file to send
+session.storbinary('STOR img3d_002179.rar', file)     # send the file
+file.close()                                    # close file and FTP
+session.quit()
