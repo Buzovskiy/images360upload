@@ -1,0 +1,6 @@
+clipboard==0.0.4
+comtypes==1.1.8
+pyperclip==1.8.2
+pywin32==300
+pywinauto==0.6.8
+six==1.15.0
