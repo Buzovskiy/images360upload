@@ -12,7 +12,7 @@ import clipboard
 import warnings
 import ftplib
 
-# import settings
+import settings
 
 # Дериктория программы
 BASE_DIR = Path(__file__).parent
@@ -64,14 +64,26 @@ for x in dir_name_list:
         sys.exit("Программа завершена с ошибками")
     dir_ids.append((x, id_product))
 
+archive_paths = []
 for dir_name, id_product in dir_ids:
-    print(PHOTO_DIR / id_product, PHOTO_DIR / dir_name)
-    shutil.make_archive(PHOTO_DIR / id_product, 'zip', PHOTO_DIR / dir_name)
+    archive_name = str(shutil.make_archive(PHOTO_DIR / id_product, 'zip', PHOTO_DIR / dir_name))
+    archive_paths.append((id_product+'.zip', archive_name))
 
-sys.exit(0)
+ans = input("Проверьте, сформированы ли архивы. \nЗагрузить архивы на сервер? (y/n): ")
+if ans != 'y':
+    sys.exit("Архивы на сервер не загружены. Программа остановлена")
+
+# sys.exit(0)
 
 session = ftplib.FTP(settings.HOST, settings.USER, settings.PASSWORD)
-file = open('img3d_002179.rar', 'rb')  # file to send
-session.storbinary('STOR img3d_002179.rar', file)  # send the file
-file.close()  # close file and FTP
+count = 0
+
+for archive, path_to_archive in archive_paths:
+    if os.path.exists(path_to_archive):
+        file = open(path_to_archive, 'rb')  # file to send
+        session.storbinary('STOR ' + archive, file)  # send the file
+        count += 1
+        print(f"------ {archive} загружен -------")
+        file.close()  # close file and FTP
 session.quit()
+sys.exit(f"На сервер загружено {count} файлов \nВыполнение программы окончено")
