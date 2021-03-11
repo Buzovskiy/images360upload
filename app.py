@@ -15,7 +15,7 @@ import ftplib
 import settings
 
 # Дериктория программы
-BASE_DIR = Path(__file__).parent
+BASE_DIR = Path(__file__).resolve().parent
 # Дериктория папок с изображениями
 PHOTO_DIR = BASE_DIR.parent / 'photo-animation' / 'main-dir'
 
